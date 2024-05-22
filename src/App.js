@@ -47,7 +47,7 @@ function App() {
 
 
   return (
-    <div className="container">
+    <div className="container group">
       <div className="right">
         <div className={`slider ${addClassName}`} onAnimationEnd={() => animationEnd()}>
           <div className="list">
@@ -62,9 +62,9 @@ function App() {
             }
           </div>
 
-          <div className="nextPrevArrows">
-            <button onClick={() => moveSlider('prev')} className="prev"> {`<`}</button>
-            <button onClick={() => moveSlider('next')} className="next"> {`>`} </button>
+          <div className="nextPrevArrows absolute z-10 flex justify-between w-full top-[50%] translate-y-[-50%] p-[1rem]">
+            <button onClick={() => moveSlider('prev')} className="prev w-[40px] h-[40px] rounded-full border-none font-bold transition-all duration-300 cursor-pointer hidden group-hover:block group-hover:text-slate-200"> {`<`}</button>
+            <button onClick={() => moveSlider('next')} className="next w-[40px] h-[40px] rounded-full border-none font-bold transition-all duration-300 cursor-pointer hidden group-hover:block group-hover:text-slate-200"> {`>`} </button>
           </div>
         </div>
       </div>
@@ -79,7 +79,6 @@ function App() {
                 transition-all w-2 h-2 bg-[#fff] rounded-full
                 ${item === imageList[0] ? "p-1" : "bg-opacity-50"}
                 `}
-
               ></div>
             ))
           }
