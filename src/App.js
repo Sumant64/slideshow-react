@@ -10,12 +10,19 @@ const arr = [
 ]
 
 function App() {
-  const [imageList, setImageList] = useState([]);
+  const [imageList, setImageList] = useState(arr);
   const [addClassName, setaddClassName] = useState('');
+  let timer = 3000;
+  let counter = 1;
 
   useEffect(() => {
-    setImageList(arr)
-  }, [])
+    const slideInterval = setInterval(() => {
+      moveSlider('next')
+    }, timer)
+    counter++;
+    
+    return () => clearInterval(slideInterval)
+  }, [counter])
 
 
   const moveSlider = (direction) => {
@@ -60,6 +67,24 @@ function App() {
             <button onClick={() => moveSlider('next')} className="next"> {`>`} </button>
           </div>
         </div>
+      </div>
+
+      <div className='absolute z-30 bottom-4 right-0 left-0'>
+      <div className="flex items-center justify-center gap-2 w-full">
+          {
+            arr.map((item, i) => (
+              <div
+                key={item}
+                className={`
+                transition-all w-2 h-2 bg-[#fff] rounded-full
+                ${item === imageList[0] ? "p-1" : "bg-opacity-50"}
+                `}
+
+              ></div>
+            ))
+          }
+
+      </div>
       </div>
     </div>
   );
