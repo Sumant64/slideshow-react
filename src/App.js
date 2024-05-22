@@ -12,15 +12,25 @@ const arr = [
 function App() {
   const [imageList, setImageList] = useState(arr);
   const [addClassName, setaddClassName] = useState('');
+  const [thumbnailList, setThumbnailList] = useState([])
   let timer = 3000;
   let counter = 1;
 
   useEffect(() => {
+    let thumbArr = [];
+    arr.map((item, i) => {
+      thumbArr.push({ image: item, index: i });
+    })
+    setThumbnailList(thumbArr)
+  }, [])
+
+  useEffect(() => {
+    if (imageList.length <= 1) return
     const slideInterval = setInterval(() => {
       moveSlider('next')
     }, timer)
     counter++;
-    
+
     return () => clearInterval(slideInterval)
   }, [counter])
 
@@ -54,7 +64,7 @@ function App() {
             {
               imageList.map((item) => {
                 return (
-                  <div className="item">
+                  <div className="item" key={item}>
                     <img src={item} alt="image 1" />
                   </div>
                 )
@@ -62,29 +72,36 @@ function App() {
             }
           </div>
 
-          <div className="nextPrevArrows absolute z-10 flex justify-between w-full top-[50%] translate-y-[-50%] p-[1rem]">
-            <button onClick={() => moveSlider('prev')} className="prev w-[40px] h-[40px] rounded-full border-none font-bold transition-all duration-300 cursor-pointer hidden group-hover:block group-hover:text-slate-200"> {`<`}</button>
-            <button onClick={() => moveSlider('next')} className="next w-[40px] h-[40px] rounded-full border-none font-bold transition-all duration-300 cursor-pointer hidden group-hover:block group-hover:text-slate-200"> {`>`} </button>
-          </div>
+          {imageList.length > 1 &&
+            <div className="nextPrevArrows absolute z-10 flex justify-between w-full top-[50%] translate-y-[-50%] p-[1rem]">
+              <button onClick={() => moveSlider('prev')} className="prev w-[40px] h-[40px] rounded-full border-none font-bold transition-all duration-300 cursor-pointer hidden group-hover:block group-hover:text-slate-200"> {`<`}</button>
+              <button onClick={() => moveSlider('next')} className="next w-[40px] h-[40px] rounded-full border-none font-bold transition-all duration-300 cursor-pointer hidden group-hover:block group-hover:text-slate-200"> {`>`} </button>
+            </div>}
         </div>
       </div>
 
-      <div className='absolute z-30 bottom-4 right-0 left-0'>
-      <div className="flex items-center justify-center gap-2 w-full">
-          {
-            arr.map((item, i) => (
-              <div
-                key={item}
-                className={`
-                transition-all w-2 h-2 bg-[#fff] rounded-full
-                ${item === imageList[0] ? "p-1" : "bg-opacity-50"}
-                `}
-              ></div>
-            ))
-          }
+      {
+        imageList.length > 1 &&
 
-      </div>
-      </div>
+        <div className='absolute z-30 bottom-4 right-0 left-0'>
+          <div className="flex items-center justify-center gap-2 w-full">
+            {
+              thumbnailList.map((item, i) => {
+                return (
+                  <div
+                    key={item.index}
+                    className={`
+                transition-all w-2 h-2 bg-[#fff] rounded-full
+                ${item.image === imageList[0] ? "p-1" : "bg-opacity-50"}
+                `}
+                  ></div>
+                )
+              })
+            }
+
+          </div>
+        </div>
+      }
     </div>
   );
 }
